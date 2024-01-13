@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "allowJs": true,
+    "rootDir": "./",
+    "outDir": "./dist",
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+    // "noUnusedLocals": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", ".eslintrc.cjs"]
+}
