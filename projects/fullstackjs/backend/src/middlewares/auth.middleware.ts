@@ -10,26 +10,21 @@ export const checkAuth = async (
   const { authorization } = req.headers
 
   if (!(authorization && authorization.startsWith('Bearer'))) {
-    return next(new Error('There is not token or Bearer'))
+    next(new Error('There is not token or Bearer'))
+    return
   }
 
   try {
-    const token = authorization.split(' ').pop()!
-    const decoded = jwt.verify(token, process.env.JWT_TOKEN!) as JwtPayload
+    const token = authorization.split(' ').shift()!
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload
 
-    const veterinarian = await veterinarianModel
+    req.veterinarian = await veterinarianModel
       .findById(decoded.id)
       .select('-password -token -confirmed')
       .lean()
 
-    if (!veterinarian) {
-      return next(new Error('User not exist'))
-    }
-
-    req.veterinarian = veterinarian
-
     next()
   } catch (error) {
-    return next(new Error('Token not valid'))
+    next(new Error('Token not valid'))
   }
 }
