@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
 import jwt, { type JwtPayload } from 'jsonwebtoken'
 import { veterinarianModel } from '../models/Veterinarian'
+import { ApplicationError } from '../utils/ApplicationError'
 
 export const checkAuth = async (
   req: Request<unknown, unknown, unknown>,
@@ -10,7 +11,7 @@ export const checkAuth = async (
   const { authorization } = req.headers
 
   if (!(authorization && authorization.startsWith('Bearer'))) {
-    return next(new Error('There is not token or Bearer'))
+    return next(new ApplicationError('There is not token or Bearer', 403))
   }
 
   try {
@@ -24,7 +25,6 @@ export const checkAuth = async (
 
     return next()
   } catch (error) {
-    console.log(error)
-    return next(new Error('Token not valid'))
+    return next(new ApplicationError('Token not valid', 401))
   }
 }

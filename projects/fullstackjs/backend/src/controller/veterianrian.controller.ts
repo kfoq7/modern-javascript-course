@@ -1,8 +1,9 @@
 import type { Request, Response, NextFunction } from 'express'
 import { veterinarianModel } from '../models/Veterinarian'
+import type { Veterinarian } from '../types'
 import { compartePassword, encryptPassword, generateId } from '../utils'
 import { generateJWT } from '../utils/generateJWT'
-import type { Veterinarian } from '../types'
+import { ApplicationError } from '../utils/ApplicationError'
 
 export const register = async (
   req: Request<unknown, unknown, Veterinarian>,
@@ -14,7 +15,7 @@ export const register = async (
 
     const existUser = await veterinarianModel.findOne({ email })
     if (existUser) {
-      throw new Error('Email already exist')
+      throw new ApplicationError('Email already exist')
     }
 
     const hashPassword = encryptPassword(password)
@@ -56,7 +57,7 @@ export const verify = async (
 
     const verifyUser = await veterinarianModel.findOne({ token })
     if (!verifyUser) {
-      throw new Error('Token not valid')
+      throw new ApplicationError('Token not valid', 401)
     }
 
     verifyUser.token = null
@@ -79,15 +80,15 @@ export const authentication = async (
 
     const user = await veterinarianModel.findOne({ email })
     if (!user) {
-      throw new Error('User not exist')
+      throw new ApplicationError('User not exist')
     }
 
     if (!user.confirmed) {
-      throw new Error('Your account is not confirmed yet')
+      throw new ApplicationError('Your account is not confirmed yet', 403)
     }
 
     if (compartePassword(password, user.password)) {
-      throw new Error('Wrong password')
+      throw new ApplicationError('Wrong password')
     }
 
     const token = generateJWT(user.id)
@@ -110,7 +111,7 @@ export const forgotPassword = async (
 
     const existUser = await veterinarianModel.findOne({ email })
     if (!existUser) {
-      throw new Error('User not exist')
+      throw new ApplicationError('User not exist')
     }
 
     existUser.token = generateId()
@@ -132,7 +133,7 @@ export const verifyToken = async (
 
     const tokenValid = await veterinarianModel.findOne({ token })
     if (!tokenValid) {
-      throw new Error('Token not valid')
+      throw new ApplicationError('Token not valid', 401)
     }
 
     res.json({ msg: 'Token valid and user exist' })
@@ -152,7 +153,7 @@ export const newPassword = async (
 
     const veterianrian = await veterinarianModel.findOne({ token })
     if (!veterianrian) {
-      throw new Error('There was an error')
+      throw new ApplicationError('There was an error', 400)
     }
 
     veterianrian.token = null
