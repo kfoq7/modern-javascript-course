@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import axios from 'axios'
+import { AxiosError } from 'axios'
 import { Link } from 'react-router-dom'
 import { Button, Input, Title } from '../components/ui'
 import { Alert } from '../components/Alert'
+import { regiserVeterinarian } from '../services/veterinarian.service'
 
 export const Register = () => {
-  const [veterinarian, setVeterinarian] = useState<Veterinarian>({
+  const [veterinarian, setVeterinarian] = useState<VeterinarianRegister>({
     name: '',
     email: '',
     password: '',
@@ -47,15 +48,15 @@ export const Register = () => {
     }
 
     try {
-      const url = 'http://localhost:8000/api/veterinarian/register'
-      const response = await axios.post(url, {
-        ...restValues,
-        password
-      })
+      await regiserVeterinarian({ ...restValues, password })
 
-      console.log(response)
+      setAlert({ message: 'Created successfully', error: false })
     } catch (error) {
       console.log(error)
+
+      if (error instanceof AxiosError) {
+        setAlert({ message: error.response?.data.error, error: true })
+      }
     }
   }
 
