@@ -14,7 +14,7 @@ const app = express()
 app.use(express.json())
 app.use(morgan('dev'))
 
-const allowedDomains = ['http://localhost:5173']
+const allowedDomains = [process.env.FRONTEND_URL]
 
 app.use(
   cors({

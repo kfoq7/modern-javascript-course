@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./dist/src/app.js",
     "build": "tsc",
-    "dev": "tsc && concurrently \"tsc -w\" \"nodemon ./dist/src/app.js\""
+    "dev": "set NODE_ENV=development && tsc && concurrently \"tsc -w\" \"nodemon ./dist/src/app.js\""
   },
   "keywords": [],
   "author": "",
@@ -18,7 +18,8 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.8"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -27,6 +28,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.10.6",
+    "@types/nodemailer": "^6.4.14",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
     "concurrently": "^8.2.2",

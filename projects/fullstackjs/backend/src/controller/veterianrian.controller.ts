@@ -4,6 +4,7 @@ import type { Veterinarian } from '../types'
 import { compartePassword, encryptPassword, generateId } from '../utils'
 import { generateJWT } from '../utils/generateJWT'
 import { ApplicationError } from '../utils/ApplicationError'
+import { registerEmail } from '../utils/register-email'
 
 export const register = async (
   req: Request<unknown, unknown, Veterinarian>,
@@ -11,7 +12,7 @@ export const register = async (
   next: NextFunction
 ) => {
   try {
-    const { email, password } = req.body
+    const { email, name, password } = req.body
 
     const existUser = await veterinarianModel.findOne({ email })
     if (existUser) {
@@ -24,6 +25,8 @@ export const register = async (
       ...req.body,
       password: hashPassword
     })
+
+    await registerEmail({ email, name, token: veterinarian.token })
 
     res.json({
       veterinarian
