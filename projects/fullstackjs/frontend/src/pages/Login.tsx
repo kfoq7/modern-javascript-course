@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Title } from '../components/ui/Title'
-import { Button } from '../components/ui/Button'
+import { Title, Button } from '../components/ui/'
 
 export const Login = () => {
   return (

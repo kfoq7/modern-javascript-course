@@ -1,5 +1,9 @@
-import { axiosInstance } from './axios'
+import { clientAxios } from './axios'
 
 export const regiserVeterinarian = async (data: Veterinarian) => {
-  return axiosInstance.post('/veterinarian/register', data)
+  return await clientAxios.post('/veterinarian/register', data)
+}
+
+export const verifyAccount = async (id: string) => {
+  return await clientAxios.get(`/veterinarian/verify/${id}`)
 }

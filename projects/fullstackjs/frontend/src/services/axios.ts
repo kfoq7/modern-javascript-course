@@ -1,5 +1,10 @@
 import axios from 'axios'
 
-export const axiosInstance = axios.create({
-  baseURL: import.meta.env.API_URL
+const baseURL =
+  import.meta.env.VITE_ENV === 'development'
+    ? import.meta.env.VITE_API_DEV_URL
+    : import.meta.env.VITE_API_URL
+
+export const clientAxios = axios.create({
+  baseURL
 })

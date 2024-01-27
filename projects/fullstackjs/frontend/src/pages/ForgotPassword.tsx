@@ -1,5 +1,4 @@
-import { Button } from '../components/ui/Button'
-import { Title } from '../components/ui/Title'
+import { Button, Input, Title } from '../components/ui'
 
 export const ForgotPassword = () => {
   return (
@@ -14,13 +13,12 @@ export const ForgotPassword = () => {
       <div className="mt-14 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
         <form className="w-full">
           <div className="my-6">
-            <label className="uppercase text-gray-600 block text-xl font-bold">
-              Email:
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Email:"
+              name="name"
               placeholder="Your email"
-              className="border w-full p-3 mt-3 bg-gray-50 rounded-lg"
+              // value={veterinarian.name}
+              // onChange={handleOnChange}
             />
           </div>
 
