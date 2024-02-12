@@ -3,5 +3,7 @@ interface Props {
 }
 
 export const Title = ({ children }: Props) => (
-  <h1 className="text-indigo-600 font-black text-6xl">{children}</h1>
+  <div>
+    <h1 className="text-indigo-600 font-black text-6xl">{children}</h1>
+  </div>
 )

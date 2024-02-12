@@ -64,12 +64,10 @@ export const Register = () => {
 
   return (
     <>
-      <div>
-        <Title>
-          Create your account and manage{' '}
-          <span className="text-black">your Patients</span>
-        </Title>
-      </div>
+      <Title>
+        Create your account and manage{' '}
+        <span className="text-black">your Patients</span>
+      </Title>
 
       <div className="mt-14 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
         {message && <Alert alert={alert} />}

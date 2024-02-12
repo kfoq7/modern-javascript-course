@@ -1,17 +1,33 @@
 import { Link } from 'react-router-dom'
 import { Title, Button } from '../components/ui/'
+import { Alert } from '../components/Alert'
+import { useAuth } from '../hooks/useAuth'
 
 export const Login = () => {
+  const { auth, alert, login, setAuth } = useAuth()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAuth(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    login()
+  }
+
+  const { message } = alert
+
   return (
     <>
-      <div>
-        <Title>
-          Sign in and Manage your <span className="text-black">Patients</span>
-        </Title>
-      </div>
+      <Title>
+        Sign in and Manage your <span className="text-black">Patients</span>
+      </Title>
 
       <div className="mt-14 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
-        <form className="w-full">
+        {message && <Alert alert={alert} />}
+
+        <form className="w-full" onSubmit={handleSubmit}>
           <div className="my-6">
             <label className="uppercase text-gray-600 block text-xl font-bold">
               Email:
@@ -20,6 +36,8 @@ export const Login = () => {
               type="text"
               placeholder="register email"
               className="border w-full p-3 mt-3 bg-gray-50 rounded-lg"
+              value={auth.email}
+              onChange={handleChange}
             />
           </div>
           <div className="my-6">
@@ -30,6 +48,8 @@ export const Login = () => {
               type="text"
               placeholder="register email"
               className="border w-full p-3 mt-3 bg-gray-50 rounded-lg"
+              value={auth.password}
+              onChange={handleChange}
             />
           </div>
           <Button value="Sign in" />

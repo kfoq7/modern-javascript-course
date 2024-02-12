@@ -12,3 +12,9 @@ interface Alert {
   message: string
   error: boolean
 }
+
+interface Auth {
+  email: string
+  password: string
+  token?: string | null
+}
