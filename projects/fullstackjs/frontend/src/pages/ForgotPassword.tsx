@@ -18,8 +18,6 @@ export const ForgotPassword = () => {
     try {
       const { data } = await forgotPassword(email)
 
-      console.log(data)
-
       setAlert({ message: data.msg, error: false })
     } catch (error) {
       if (error instanceof AxiosError) {

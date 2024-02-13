@@ -14,6 +14,7 @@ interface Alert {
 }
 
 interface Auth {
+  _id?: string
   email: string
   password: string
   token?: string | null

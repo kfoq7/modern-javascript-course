@@ -1,5 +1,6 @@
 import { useState, createContext, useEffect } from 'react'
 import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
 import {
   loginVeterinarian,
   getVeterinarianProfile
@@ -14,13 +15,17 @@ interface AuthContext {
   setAuth: React.Dispatch<React.SetStateAction<Auth>>
   alert: Alert
   login: () => Promise<void>
+  logout: () => void
+  loading: boolean
 }
 
 export const AuthContext = createContext<AuthContext | null>(null)
 
 export function AuthProvider({ children }: Props) {
+  const navigate = useNavigate()
   const [auth, setAuth] = useState<Auth>({ email: '', password: '' })
   const [alert, setAlert] = useState<Alert>({ message: '', error: false })
+  const [loading, setLoading] = useState(true)
 
   const login = async () => {
     if (Object.values(auth).includes('')) {
@@ -29,9 +34,9 @@ export function AuthProvider({ children }: Props) {
 
     try {
       const { data } = await loginVeterinarian(auth)
-
-      setAuth(data)
       localStorage.setItem('token', data.token)
+
+      navigate('/admin')
     } catch (error) {
       if (error instanceof AxiosError) {
         return setAlert({ message: error.response?.data.msg, error: true })
@@ -39,29 +44,39 @@ export function AuthProvider({ children }: Props) {
     }
   }
 
+  const logout = () => {
+    localStorage.removeItem('token')
+    setAuth({ _id: '', email: '', password: '', token: '' })
+  }
+
   useEffect(() => {
-    const authenticUser = () => {
+    const authenticUser = async () => {
       const token = localStorage.getItem('token')
-      if (token == null) return
+      if (token == null) {
+        return setLoading(false)
+      }
 
-      getVeterinarianProfile(token)
-        .then(({ data }) => {
-          setAuth(prev => ({ ...prev, ...data }))
-        })
-        .catch(error => {
-          setAuth({ email: '', password: '' })
+      try {
+        const { data } = await getVeterinarianProfile(token)
+        setAuth(prev => ({ ...prev, ...data.profile }))
+      } catch (error) {
+        setAuth({ email: '', password: '' })
 
-          if (error instanceof AxiosError) {
-            setAlert({ message: error.response?.data.msg, error: true })
-          }
-        })
+        if (error instanceof AxiosError) {
+          setAlert({ message: error.response?.data.msg, error: true })
+        }
+      }
+
+      setLoading(false)
     }
 
     authenticUser()
-  }, [auth])
+  }, [])
 
   return (
-    <AuthContext.Provider value={{ auth, alert, setAuth, login }}>
+    <AuthContext.Provider
+      value={{ auth, alert, setAuth, login, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   )

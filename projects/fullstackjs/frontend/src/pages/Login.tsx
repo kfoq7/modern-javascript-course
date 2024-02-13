@@ -34,6 +34,7 @@ export const Login = () => {
             </label>
             <input
               type="text"
+              name="email"
               placeholder="register email"
               className="border w-full p-3 mt-3 bg-gray-50 rounded-lg"
               value={auth.email}
@@ -46,6 +47,7 @@ export const Login = () => {
             </label>
             <input
               type="text"
+              name="password"
               placeholder="register email"
               className="border w-full p-3 mt-3 bg-gray-50 rounded-lg"
               value={auth.password}

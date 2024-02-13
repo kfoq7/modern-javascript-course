@@ -1,10 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
 import { AuthLayout } from './components/layouts/Auth'
+import { ProtectedRoute } from './components/layouts/ProtectedRoute'
+
 import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { ForgotPassword } from './pages/ForgotPassword'
 import { ConfirmAccount } from './pages/ConfirmAccount'
 import { NewPassword } from './pages/NewPassword'
+import { Administrator } from './pages/Administrator'
+
 import { AuthProvider } from './context/authContext'
 
 function App() {
@@ -20,9 +25,9 @@ function App() {
             <Route path="confirm/:id" element={<ConfirmAccount />} />
           </Route>
 
-          {/* <Route path="/admin" element={<AdminLayout />}>
-
-        </Route> */}
+          <Route path="/admin" element={<ProtectedRoute />}>
+            <Route index element={<Administrator />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
